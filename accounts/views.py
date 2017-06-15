@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.forms import UserCreationForm
+from accounts.forms import RegistrationForm
 
 # Create your views here.
 
@@ -15,12 +16,12 @@ def home_page(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('/account')
     else:
-        form = UserCreationForm()
+        form = RegistrationForm()
         args = {'form': form}
         return render(request, 'accounts/register_form.html', args)
 
