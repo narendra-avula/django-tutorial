@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.forms import UserCreationForm
 from accounts.forms import RegistrationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm
 
 # Create your views here.
 
@@ -28,7 +29,7 @@ def register(request):
 
 
 
-def user_profile(request):
+def view_profile(request):
     args = {
         'user': request.user,
         'first_name' : request.user.first_name,
@@ -38,7 +39,18 @@ def user_profile(request):
     return render(request, 'accounts/profile.html', args)
 
 
-
+def edit_profile(request):
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/account/profile')
+    else:
+        form = UserChangeForm(instance=request.user)
+        args = {
+            'form' : form
+        }
+        return render(request, 'accounts/edit_profile.html', args)
 
 
 
